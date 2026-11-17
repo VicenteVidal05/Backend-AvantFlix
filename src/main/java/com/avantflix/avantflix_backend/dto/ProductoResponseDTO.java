@@ -6,6 +6,7 @@ public record ProductoResponseDTO(
     String nombre,
     Integer precio,
     Integer stock,
+    Integer descuento,
     String nombreCategoria,
     String imagenUrl,
     String descripcion,

@@ -29,6 +29,7 @@ public class ProductoService {
                 p.getIdProducto(),
                 p.getNombre(),
                 p.getPrecio(),
+                p.getDescuento(),
                 p.getStock(),
                 p.getCategoria().getCategoria(),
                 p.getImagenUrl(),
@@ -55,6 +56,7 @@ public class ProductoService {
         Producto producto = new Producto();
         producto.setNombre(dto.nombre());
         producto.setPrecio(dto.precio());
+        producto.setDescuento(dto.descuento());
         producto.setStock(dto.esDigital() ? 0 : dto.stock()); // si es digital, stock 0
         producto.setCategoria(categoria);
         producto.setImagenUrl(dto.imagenUrl());

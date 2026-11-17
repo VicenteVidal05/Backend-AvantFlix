@@ -31,6 +31,9 @@ public class Producto {
     @Column(name = "precio", nullable = false)
     private Integer precio;
 
+    @Column(name = "descuento", nullable = false)
+    private Integer descuento;
+
     @Column(name = "stock", nullable = false)
     private Integer stock;
     

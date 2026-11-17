@@ -15,6 +15,9 @@ public record ProductoRequestDTO(
     @Min(value = 0, message = "El precio no puede ser negativo")
     Integer precio,
 
+    @Min(value = 0, message = "El descuento no puede ser negativo")
+    Integer descuento,
+
     @NotNull
     @Min(0)
     Integer stock,
