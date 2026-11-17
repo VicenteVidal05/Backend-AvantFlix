@@ -27,7 +27,11 @@ public class RegionService {
         return regionRepository.save(region);
     }
 
-    public void eliminar(Long id){
+    public boolean eliminar(Long id){
+        if (!regionRepository.existsById(id)){
+            return false;
+        }
         regionRepository.deleteById(id);
+        return true;
     }
 }
