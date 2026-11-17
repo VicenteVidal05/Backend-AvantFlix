@@ -34,4 +34,13 @@ public class RegionService {
         regionRepository.deleteById(id);
         return true;
     }
+
+    public Optional<Region> actualizar(Long id, Region datosNuevos){
+
+        return regionRepository.findById(id).map(regionExistente -> {
+            regionExistente.setRegion(datosNuevos.getRegion());
+            return regionRepository.save(regionExistente);
+        });
+
+    }
 }

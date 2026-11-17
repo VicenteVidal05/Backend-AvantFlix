@@ -41,4 +41,11 @@ public class RegionController {
         return ResponseEntity.noContent().build();
     }
 
+    @PostMapping("/{id}")
+    public ResponseEntity<Region> actualizar(@PathVariable Long id, @RequestBody Region region){
+        return regionService.actualizar(id, region)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
 }
