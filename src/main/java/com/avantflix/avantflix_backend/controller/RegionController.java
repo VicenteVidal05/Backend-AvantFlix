@@ -22,11 +22,6 @@ public class RegionController {
         return ResponseEntity.ok(regionService.listarTodas());
     }
 
-    // Aquí te toca escribir a ti:
-    // 1. @GetMapping("/{id}") -> si el Optional está presente devuelve 200 OK, si no, 404 Not Found.
-    // 2. @PostMapping -> recibe @RequestBody Region region, guarda y devuelve 201 Created.
-    // 3. @DeleteMapping("/{id}") -> elimina por ID y devuelve 204 No Content.
-
     @GetMapping("/{id}")
     public ResponseEntity<Region> obtenerPorId(@PathVariable Long id){
         return regionService.obtenerPorId(id)

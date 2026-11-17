@@ -6,7 +6,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.Data;
 
+@Data
 @Entity
 @Table(name = "Region")
 public class Region {
@@ -18,26 +20,4 @@ public class Region {
     @Column(name = "region", nullable = false, length = 45)
     private String region;
 
-    public Region() {
-    }
-
-    public Region(String region) {
-        this.region = region;
-    }
-
-    public Long getIdRegion() {
-        return idRegion;
-    }
-
-    public void setIdRegion(Long idRegion) {
-        this.idRegion = idRegion;
-    }
-
-    public String getRegion() {
-        return region;
-    }
-
-    public void setRegion(String region) {
-        this.region = region;
-    }
 }
