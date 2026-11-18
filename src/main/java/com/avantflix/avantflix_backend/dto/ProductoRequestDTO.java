@@ -1,5 +1,6 @@
 package com.avantflix.avantflix_backend.dto;
 
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -16,6 +17,7 @@ public record ProductoRequestDTO(
     Integer precio,
 
     @Min(value = 0, message = "El descuento no puede ser negativo")
+    @Max(value = 100, message = "El descuento no puede superar el 100%")
     Integer descuento,
 
     @NotNull
