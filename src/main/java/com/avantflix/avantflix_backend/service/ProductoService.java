@@ -49,7 +49,7 @@ public class ProductoService {
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Producto no encontrado"));
 }
 
-    public ProductoResponseDTO crear(ProductoRequestDTO dto) {
+    public ProductoResponseDTO guardar(ProductoRequestDTO dto) {
         Categoria categoria = categoriaRepository.findById(dto.idCategoria())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Categoría no encontrada"));
 
