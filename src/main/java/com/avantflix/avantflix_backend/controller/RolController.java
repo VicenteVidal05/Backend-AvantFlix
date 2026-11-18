@@ -17,7 +17,7 @@ import com.avantflix.avantflix_backend.model.Rol;
 import com.avantflix.avantflix_backend.service.RolService;
 
 @RestController
-@RequestMapping("/api/roles")
+@RequestMapping("/api/v1/roles")
 public class RolController {
 
     private final RolService rolService;

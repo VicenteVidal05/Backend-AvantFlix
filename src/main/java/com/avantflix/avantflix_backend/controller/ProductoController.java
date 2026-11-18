@@ -21,7 +21,7 @@ import com.avantflix.avantflix_backend.service.ProductoService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/api/productos")
+@RequestMapping("/api/v1/productos")
 @CrossOrigin(origins = "http://localhost:5173")
 public class ProductoController {
 
