@@ -56,8 +56,8 @@ public class ProductoService {
         Producto producto = new Producto();
         producto.setNombre(dto.nombre());
         producto.setPrecio(dto.precio());
-        producto.setDescuento(dto.descuento());
-        producto.setStock(dto.esDigital() ? 0 : dto.stock()); // si es digital, stock 0
+        producto.setDescuento(dto.descuento() != null ? dto.descuento() : 0);
+        producto.setStock(dto.esDigital() ? 0 : dto.stock());
         producto.setCategoria(categoria);
         producto.setImagenUrl(dto.imagenUrl());
         producto.setDescripcion(dto.descripcion());
@@ -76,6 +76,7 @@ public class ProductoService {
 
         producto.setNombre(dto.nombre());
         producto.setPrecio(dto.precio());
+        producto.setDescuento(dto.descuento() != null ? dto.descuento() : 0);
         producto.setStock(dto.esDigital() ? 0 : dto.stock());
         producto.setCategoria(categoria);
         producto.setImagenUrl(dto.imagenUrl());
