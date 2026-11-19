@@ -44,10 +44,10 @@ public class ProductoService {
     }
 
     public ProductoResponseDTO obtenerPorId(Long id) {
-    return productoRepository.findById(id)
-            .map(this::mapearADTO)
-            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Producto no encontrado"));
-}
+        return productoRepository.findById(id)
+                .map(this::mapearADTO)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Producto no encontrado"));
+    }
 
     public ProductoResponseDTO guardar(ProductoRequestDTO dto) {
         Categoria categoria = categoriaRepository.findById(dto.idCategoria())
@@ -88,10 +88,10 @@ public class ProductoService {
     }
 
     public void eliminar(Long id) {
-    if (!productoRepository.existsById(id)) {
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Producto no encontrado");
+        if (!productoRepository.existsById(id)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Producto no encontrado");
+        }
+        productoRepository.deleteById(id);
     }
-    productoRepository.deleteById(id);
-}
 
 }
