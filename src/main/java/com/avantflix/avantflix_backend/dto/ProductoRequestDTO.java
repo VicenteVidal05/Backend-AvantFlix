@@ -1,5 +1,7 @@
 package com.avantflix.avantflix_backend.dto;
 
+import org.hibernate.validator.constraints.URL;
+
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -27,9 +29,13 @@ public record ProductoRequestDTO(
     @NotNull(message = "Debe indicar una categoría")
     Long idCategoria,
 
+    @URL(message = "El formato de la URL de imagen no es valido")
+    @Size(max = 500, message = "La URL es demasiado larga")
     String imagenUrl,
+    
+    @Size(max = 1000, message = "La descripcion no puede superar los 1000 caracteres")
     String descripcion,
 
-    @NotNull
+    @NotNull(message = "Debe indicar si el producto es digital")
     Boolean esDigital
 ) {}
