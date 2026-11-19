@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,6 +19,7 @@ import com.avantflix.avantflix_backend.service.RolService;
 
 @RestController
 @RequestMapping("/api/v1/roles")
+@CrossOrigin(origins = "http://localhost:5173")
 public class RolController {
 
     private final RolService rolService;
@@ -32,26 +34,28 @@ public class RolController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Rol> obtenerPorId(@PathVariable Long id){
+    public ResponseEntity<Rol> obtenerPorId(@PathVariable Long id) {
         return rolService.obtenerPorId(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public ResponseEntity<Rol> guardar(@RequestBody Rol rol){
+    public ResponseEntity<Rol> guardar(@RequestBody Rol rol) {
         Rol nuevoRol = rolService.guardar(rol);
         return ResponseEntity.status(HttpStatus.CREATED).body(nuevoRol);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminar(@PathVariable Long id){
-        rolService.eliminar(id);
+    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
+        if (!rolService.eliminar(id)) {
+            return ResponseEntity.notFound().build();
+        }
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Rol> actualizar(@PathVariable Long id, @RequestBody Rol rol){
+    public ResponseEntity<Rol> actualizar(@PathVariable Long id, @RequestBody Rol rol) {
         return rolService.actualizar(id, rol)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
