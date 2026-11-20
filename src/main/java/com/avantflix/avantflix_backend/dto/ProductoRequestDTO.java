@@ -34,8 +34,5 @@ public record ProductoRequestDTO(
     String imagenUrl,
     
     @Size(max = 1000, message = "La descripcion no puede superar los 1000 caracteres")
-    String descripcion,
-
-    @NotNull(message = "Debe indicar si el producto es digital")
-    Boolean esDigital
+    String descripcion
 ) {}

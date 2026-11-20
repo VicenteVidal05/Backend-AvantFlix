@@ -9,6 +9,5 @@ public record ProductoResponseDTO(
     Integer stock,
     String nombreCategoria,
     String imagenUrl,
-    String descripcion,
-    Boolean esDigital
+    String descripcion
 ) {}

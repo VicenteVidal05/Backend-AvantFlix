@@ -47,7 +47,4 @@ public class Producto {
     @Column(name = "descripcion", nullable = true, columnDefinition = "TEXT")
     private String descripcion;
 
-    @Column(name = "esDigital", nullable = false)
-    private Boolean esDigital;
-
 }

@@ -94,14 +94,12 @@ public class PedidoService {
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                             "Producto no encontrado con ID: " + item.idProducto()));
 
-            if (!Boolean.TRUE.equals(producto.getEsDigital())) {
-                if (producto.getStock() < item.cantidad()) {
-                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                            "Stock insuficiente para el producto: " + producto.getNombre());
-                }
-                producto.setStock(producto.getStock() - item.cantidad());
-                productoRepository.save(producto);
+            if (producto.getStock() < item.cantidad()) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                        "Stock insuficiente para el producto: " + producto.getNombre());
             }
+            producto.setStock(producto.getStock() - item.cantidad());
+            productoRepository.save(producto);
 
             int descuento = producto.getDescuento() != null ? producto.getDescuento() : 0;
             int precioUnitarioFinal = producto.getPrecio() - (producto.getPrecio() * descuento / 100);
