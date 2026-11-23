@@ -79,6 +79,58 @@ public class PedidoService {
     }
 
     @Transactional
+    public PedidoResponseDTO actualizarPedido(Long id, PedidoRequestDTO dto) {
+        Pedido pedido = pedidoRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Pedido no encontrado"));
+
+        Usuario usuario = usuarioRepository.findById(dto.idUsuario())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado"));
+
+        for (DetallePedido detalleAnterior : pedido.getDetalles()) {
+            Producto prodAnterior = detalleAnterior.getProducto();
+            prodAnterior.setStock(prodAnterior.getStock() + detalleAnterior.getCantidad());
+            productoRepository.save(prodAnterior);
+        }
+
+        pedido.getDetalles().clear();
+        pedido.setUsuario(usuario);
+
+        int totalPedido = 0;
+
+        for (DetallePedidoRequestDTO item : dto.detalles()) {
+            Producto producto = productoRepository.findById(item.idProducto())
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                            "Producto no encontrado con ID: " + item.idProducto()));
+
+            if (producto.getStock() < item.cantidad()) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                        "Stock insuficiente para el producto: " + producto.getNombre());
+            }
+
+            producto.setStock(producto.getStock() - item.cantidad());
+            productoRepository.save(producto);
+
+            int descuento = producto.getDescuento() != null ? producto.getDescuento() : 0;
+            int precioUnitarioFinal = producto.getPrecio() - (producto.getPrecio() * descuento / 100);
+            int subtotalLinea = precioUnitarioFinal * item.cantidad();
+            int ivaLinea = (int) Math.round(subtotalLinea - (subtotalLinea / 1.19));
+
+            DetallePedido nuevoDetalle = new DetallePedido();
+            nuevoDetalle.setProducto(producto);
+            nuevoDetalle.setCantidad(item.cantidad());
+            nuevoDetalle.setTotal(subtotalLinea);
+            nuevoDetalle.setIva(ivaLinea);
+
+            pedido.agregarDetalle(nuevoDetalle);
+            totalPedido += subtotalLinea;
+        }
+
+        pedido.setTotal(totalPedido);
+        Pedido pedidoActualizado = pedidoRepository.save(pedido);
+        return mapearADTO(pedidoActualizado);
+    }
+
+    @Transactional
     public PedidoResponseDTO crearPedido(PedidoRequestDTO dto) {
         Usuario usuario = usuarioRepository.findById(dto.idUsuario())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado"));
