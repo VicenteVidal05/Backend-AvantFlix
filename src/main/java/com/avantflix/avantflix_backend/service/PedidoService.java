@@ -172,4 +172,19 @@ public class PedidoService {
         Pedido pedidoGuardado = pedidoRepository.save(pedido);
         return mapearADTO(pedidoGuardado);
     }
+
+    @Transactional
+    public void eliminarPedido(Long id) {
+        Pedido pedido = pedidoRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Pedido no encontrado"));
+
+        for (DetallePedido detalle : pedido.getDetalles()) {
+            Producto producto = detalle.getProducto();
+            producto.setStock(producto.getStock() + detalle.getCantidad());
+            productoRepository.save(producto);
+        }
+
+        pedidoRepository.delete(pedido);
+    }
+
 }
