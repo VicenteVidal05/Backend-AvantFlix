@@ -32,7 +32,6 @@ public record UsuarioRequestDTO(
     @Size(max = 150)
     String direccion,
 
-    @NotNull(message = "Debe indicar un rol")
     Long idRol,
 
     @NotNull(message = "Debe indicar una comuna")

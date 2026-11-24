@@ -3,6 +3,7 @@ package com.avantflix.avantflix_backend.service;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
@@ -27,13 +28,16 @@ public class UsuarioService {
     private final RolRepository rolRepository;
     private final ComunaRepository comunaRepository;
     private final CarritoRepository carritoRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public UsuarioService(UsuarioRepository usuarioRepository, ComunaRepository comunaRepository,
-            RolRepository rolRepository, CarritoRepository carritoRepository) {
+            RolRepository rolRepository, CarritoRepository carritoRepository,
+            PasswordEncoder passwordEncoder) {
         this.usuarioRepository = usuarioRepository;
         this.comunaRepository = comunaRepository;
         this.rolRepository = rolRepository;
         this.carritoRepository = carritoRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     private UsuarioResponseDTO mapearADTO(Usuario u) {
@@ -66,8 +70,14 @@ public class UsuarioService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El correo ya está registrado");
         }
 
-        Rol rol = rolRepository.findById(dto.idRol())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Rol no encontrado"));
+        Rol rol;
+        if (dto.idRol() != null) {
+            rol = rolRepository.findById(dto.idRol())
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Rol no encontrado"));
+        } else {
+            rol = rolRepository.findByRolIgnoreCase("CLIENTE")
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Rol CLIENTE no encontrado"));
+        }
 
         Comuna comuna = comunaRepository.findById(dto.idComuna())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Comuna no encontrada"));
@@ -77,7 +87,7 @@ public class UsuarioService {
         usuario.setApellidoP(dto.apellidoP());
         usuario.setApellidoM(dto.apellidoM());
         usuario.setCorreo(dto.correo());
-        usuario.setClave(dto.clave()); // cambiar por: passwordEncoder.encode(dto.clave()) al agregar Security
+        usuario.setClave(passwordEncoder.encode(dto.clave()));
         usuario.setDireccion(dto.direccion());
         usuario.setRol(rol);
         usuario.setComuna(comuna);
@@ -115,7 +125,7 @@ public class UsuarioService {
         usuario.setComuna(comuna);
 
         if (dto.clave() != null && !dto.clave().isBlank()) {
-            usuario.setClave(dto.clave()); // Cambiar por passwordEncoder.encode(dto.clave()) al agregar Security
+            usuario.setClave(passwordEncoder.encode(dto.clave()));
         }
 
         return mapearADTO(usuarioRepository.save(usuario));
