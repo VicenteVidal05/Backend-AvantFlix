@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.avantflix.avantflix_backend.dto.ComunaRequestDTO;
@@ -14,6 +15,7 @@ import com.avantflix.avantflix_backend.repository.ComunaRepository;
 import com.avantflix.avantflix_backend.repository.RegionRepository;
 
 @Service
+@Transactional(readOnly = true)
 public class ComunaService {
 
     private final ComunaRepository comunaRepository;
@@ -44,6 +46,7 @@ public class ComunaService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Comuna no encontrada"));
     }
 
+    @Transactional
     public ComunaResponseDTO guardar(ComunaRequestDTO dto) {
         Region region = regionRepository.findById(dto.idRegion())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Región no encontrada"));
@@ -56,6 +59,7 @@ public class ComunaService {
         return mapearADTO(comunaGuardada);
     }
 
+    @Transactional
     public ComunaResponseDTO actualizar(Long id, ComunaRequestDTO dto) {
         Comuna comuna = comunaRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Comuna no encontrada"));
@@ -70,6 +74,7 @@ public class ComunaService {
         return mapearADTO(comunaActualizada);
     }
 
+    @Transactional
     public void eliminar(Long id) {
         if (!comunaRepository.existsById(id)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Comuna no encontrada");

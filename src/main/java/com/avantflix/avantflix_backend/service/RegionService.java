@@ -2,11 +2,15 @@ package com.avantflix.avantflix_backend.service;
 
 import com.avantflix.avantflix_backend.model.Region;
 import com.avantflix.avantflix_backend.repository.RegionRepository;
+
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional (readOnly = true)
 public class RegionService {
 
     private final RegionRepository regionRepository;
@@ -19,28 +23,29 @@ public class RegionService {
         return regionRepository.findAll();
     }
 
-    public Optional<Region> obtenerPorId( Long id){
+    public Optional<Region> obtenerPorId(Long id) {
         return regionRepository.findById(id);
     }
 
-    public Region guardar(Region region){
+    @Transactional
+    public Region guardar(Region region) {
         return regionRepository.save(region);
     }
 
-    public boolean eliminar(Long id){
-        if (!regionRepository.existsById(id)){
+    @Transactional
+    public boolean eliminar(Long id) {
+        if (!regionRepository.existsById(id)) {
             return false;
         }
         regionRepository.deleteById(id);
         return true;
     }
 
-    public Optional<Region> actualizar(Long id, Region datosNuevos){
-
+    @Transactional
+    public Optional<Region> actualizar(Long id, Region datosNuevos) {
         return regionRepository.findById(id).map(regionExistente -> {
             regionExistente.setRegion(datosNuevos.getRegion());
             return regionRepository.save(regionExistente);
         });
-
     }
 }
