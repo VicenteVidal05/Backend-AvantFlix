@@ -10,9 +10,11 @@ import org.springframework.web.server.ResponseStatusException;
 import com.avantflix.avantflix_backend.dto.UsuarioRequestDTO;
 import com.avantflix.avantflix_backend.dto.UsuarioResponseDTO;
 import com.avantflix.avantflix_backend.dto.UsuarioUpdateRequestDTO;
+import com.avantflix.avantflix_backend.model.Carrito;
 import com.avantflix.avantflix_backend.model.Comuna;
 import com.avantflix.avantflix_backend.model.Rol;
 import com.avantflix.avantflix_backend.model.Usuario;
+import com.avantflix.avantflix_backend.repository.CarritoRepository;
 import com.avantflix.avantflix_backend.repository.ComunaRepository;
 import com.avantflix.avantflix_backend.repository.RolRepository;
 import com.avantflix.avantflix_backend.repository.UsuarioRepository;
@@ -24,12 +26,14 @@ public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
     private final RolRepository rolRepository;
     private final ComunaRepository comunaRepository;
+    private final CarritoRepository carritoRepository;
 
-    public UsuarioService(UsuarioRepository usuarioRepository, RolRepository rolRepository,
-            ComunaRepository comunaRepository) {
+    public UsuarioService(UsuarioRepository usuarioRepository, ComunaRepository comunaRepository,
+            RolRepository rolRepository, CarritoRepository carritoRepository) {
         this.usuarioRepository = usuarioRepository;
-        this.rolRepository = rolRepository;
         this.comunaRepository = comunaRepository;
+        this.rolRepository = rolRepository;
+        this.carritoRepository = carritoRepository;
     }
 
     private UsuarioResponseDTO mapearADTO(Usuario u) {
@@ -78,7 +82,13 @@ public class UsuarioService {
         usuario.setRol(rol);
         usuario.setComuna(comuna);
 
-        return mapearADTO(usuarioRepository.save(usuario));
+        Usuario usuarioGuardado = usuarioRepository.save(usuario);
+
+        Carrito nuevoCarrito = new Carrito();
+        nuevoCarrito.setUsuario(usuarioGuardado);
+        carritoRepository.save(nuevoCarrito);
+
+        return mapearADTO(usuarioGuardado);
     }
 
     @Transactional
@@ -113,10 +123,13 @@ public class UsuarioService {
 
     @Transactional
     public void eliminar(Long id) {
-        if (!usuarioRepository.existsById(id)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado");
-        }
-        usuarioRepository.deleteById(id);
+        Usuario usuario = usuarioRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado"));
+
+        carritoRepository.findByUsuarioIdUsuario(id)
+                .ifPresent(carritoRepository::delete);
+
+        usuarioRepository.delete(usuario);
     }
 
 }
