@@ -4,6 +4,8 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 
 public record DetallePedidoRequestDTO(
+
+    Long idPedido,
     
     @NotNull(message = "El ID del producto es obligatorio")
     Long idProducto,

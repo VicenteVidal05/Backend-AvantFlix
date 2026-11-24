@@ -28,7 +28,9 @@ public class PedidoService {
     private final UsuarioRepository usuarioRepository;
     private final ProductoRepository productoRepository;
 
-    public PedidoService(PedidoRepository pedidoRepository, UsuarioRepository usuarioRepository,
+    public PedidoService(
+            PedidoRepository pedidoRepository,
+            UsuarioRepository usuarioRepository,
             ProductoRepository productoRepository) {
         this.pedidoRepository = pedidoRepository;
         this.usuarioRepository = usuarioRepository;
@@ -40,6 +42,7 @@ public class PedidoService {
                 .map(d -> new DetallePedidoResponseDTO(
                         d.getIdDetallePedido(),
                         d.getProducto().getIdProducto(),
+                        d.getPedido().getIdPedido(),
                         d.getProducto().getNombre(),
                         d.getCantidad(),
                         d.getTotal(),
