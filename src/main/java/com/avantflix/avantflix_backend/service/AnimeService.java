@@ -34,8 +34,8 @@ public class AnimeService {
                         p.getIdProducto(),
                         p.getNombre(),
                         p.getPrecio(),
-                        p.getStock(),
                         p.getDescuento(),
+                        p.getStock(),
                         p.getCategoria().getCategoria(),
                         p.getImagenUrl(),
                         p.getDescripcion()))

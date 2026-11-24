@@ -30,7 +30,7 @@ public record ProductoRequestDTO(
     Long idCategoria,
 
     @URL(message = "El formato de la URL de imagen no es valido")
-    @Size(max = 500, message = "La URL es demasiado larga")
+    @Size(max = 255, message = "La URL es demasiado larga")
     String imagenUrl,
     
     @Size(max = 1000, message = "La descripcion no puede superar los 1000 caracteres")
