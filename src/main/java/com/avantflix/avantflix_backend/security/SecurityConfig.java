@@ -35,15 +35,21 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/v1/auth/**", "/error").permitAll()
+                .requestMatchers(
+                    "/api/v1/auth/**",
+                    "/error",
+                    "/v3/api-docs/**",
+                    "/swagger-ui/**",
+                    "/swagger-ui.html"
+                ).permitAll()
                 .requestMatchers(HttpMethod.GET,
-                        "/api/v1/productos/**",
-                        "/api/v1/animes/**",
-                        "/api/v1/categorias/**",
-                        "/api/v1/tags/**",
-                        "/api/v1/blogs/**",
-                        "/api/v1/regiones/**",
-                        "/api/v1/comunas/**"
+                       "/api/v1/productos/**",
+                      "/api/v1/animes/**",
+                       "/api/v1/categorias/**",
+                      "/api/v1/tags/**",
+                      "/api/v1/blogs/**",
+                      "/api/v1/regiones/**",
+                      "/api/v1/comunas/**"
                 ).permitAll()
 
                 .requestMatchers(HttpMethod.POST, "/api/v1/productos/**", "/api/v1/animes/**", "/api/v1/categorias/**", "/api/v1/tags/**", "/api/v1/roles/**", "/api/v1/regiones/**", "/api/v1/comunas/**").hasRole("ADMIN")
